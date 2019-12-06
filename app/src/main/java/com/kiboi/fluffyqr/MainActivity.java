@@ -106,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         myDataset = new ArrayList<Person>();
         mHashPerson = new HashMap<String,Person>();
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Toast.makeText(this, "Attendance: "+myDataset.size()+"/"+mHashPerson.size(), Toast.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);
