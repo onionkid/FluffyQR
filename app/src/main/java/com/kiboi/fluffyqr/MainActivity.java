@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
     public final int RCODE_SCANNER_ACTIVITY = 0;
 
     private DatabaseReference mDatabase;
-    static String DBNAME = "fluffy";
+//    static String DBNAME = "fluffy";
+    static String DBNAME = "fluffy2";
     private final String TAG = "FQR";
 
     private RecyclerView recyclerView;
@@ -206,14 +207,20 @@ public class MainActivity extends AppCompatActivity {
      */
     void handleQRCode(String qrData)
     {
-        String[] names = qrData.split("_");
+        String key = qrData;
+        if(DBNAME.equalsIgnoreCase("fluffy2"))
+        {
+            key = qrData.replace(" ","_");
+            key = key.replace(".","_");
+        }
+
 //        Log.d(TAG,"FIRSTNAME: "+names[0]);
 //        Log.d(TAG,"FIRSTNAME: "+names[1]);
 
-        if(mHashPerson.containsKey(qrData))
+        if(mHashPerson.containsKey(key))
         {
             Log.d(TAG,"HAS KEY");
-            Person mRegPerson = mHashPerson.get(qrData);
+            Person mRegPerson = mHashPerson.get(key);
 
             Log.d(TAG,"FIRSTNAME: "+mRegPerson.firstname);
             Log.d(TAG,"LASTNME: "+mRegPerson.lastname);
@@ -266,20 +273,29 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String qrName = personData.firstname+"_"+personData.lastname;
 
+
                 try {
-                    MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                    byte[] hash = digest.digest(qrName.getBytes(StandardCharsets.UTF_8));
+                    String hashQR="";
+                    if(DBNAME.equalsIgnoreCase("fluffy")) {
+                        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                        byte[] hash = digest.digest(qrName.getBytes(StandardCharsets.UTF_8));
 
 
-                    StringBuffer hexString = new StringBuffer();
+                        StringBuffer hexString = new StringBuffer();
 
-                    for (int i = 0; i < hash.length; i++) {
-                        String hex = Integer.toHexString(0xff & hash[i]);
-                        if(hex.length() == 1) hexString.append('0');
-                        hexString.append(hex);
+                        for (int i = 0; i < hash.length; i++) {
+                            String hex = Integer.toHexString(0xff & hash[i]);
+                            if (hex.length() == 1) hexString.append('0');
+                            hexString.append(hex);
+                        }
+
+                        hashQR = hexString.toString();
                     }
-
-                    String hashQR = hexString.toString();
+                    else
+                    {
+                        hashQR = qrName.replace(" ","_");
+                        hashQR = hashQR.replace(".","_");
+                    }
 
                     DatabaseReference fluffyRef = mDatabase.child(DBNAME);
                     String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(new Date());
