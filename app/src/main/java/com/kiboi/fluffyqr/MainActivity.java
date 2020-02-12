@@ -216,11 +216,6 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            Toast.makeText(this, "Attendance: "+myDataset.size()+"/"+mHashPerson.size(), Toast.LENGTH_LONG).show();
-//        }
-
         switch(id)
         {
             case R.id.action_settings:
@@ -233,18 +228,22 @@ public class MainActivity extends AppCompatActivity {
                 downloadCSV();
                 break;
             case R.id.reset_attendance:
+                Toast.makeText(this,"Feature not yet implemented.",Toast.LENGTH_LONG).show();
                 break;
             case R.id.change_db:
                 changeDB();
                 break;
             case R.id.delete_db:
-                clearDB();
+                showDialogDelete(this,"This will clear all the contents of database: "+DBNAME);
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Download the CSV to storage
+     */
     private void downloadCSV()
     {
         CSVWriter writer = null;
@@ -362,6 +361,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Process the CSV file for input
+     * @param csvFile
+     * @param uriF
+     */
     private void processCSV(File csvFile, Uri uriF)
     {
         Log.d(TAG,"CSV FILE  READ: "+Environment.getExternalStorageDirectory() + "/"+csvFile.getName());
@@ -398,6 +402,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Deletes all the contents of the DB
+     */
     private void clearDB()
     {
         DatabaseReference fluffyRef = mDatabase.child(DBNAME);
@@ -412,14 +419,6 @@ public class MainActivity extends AppCompatActivity {
     {
         String key = qrData;
 
-//        if(DBNAME.equalsIgnoreCase("fluffy2"))
-//        {
-//            key = qrData.replace(" ","_");
-//            key = key.replace(".","_");
-//        }
-
-//        Log.d(TAG,"FIRSTNAME: "+names[0]);
-//        Log.d(TAG,"FIRSTNAME: "+names[1]);
 
         if(mHashPerson.containsKey(key))
         {
@@ -479,28 +478,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                 try {
-//                    String hashQR=key;
-//                    if(DBNAME.equalsIgnoreCase("fluffy")) {
-//                        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-//                        byte[] hash = digest.digest(qrName.getBytes(StandardCharsets.UTF_8));
-//
-//
-//                        StringBuffer hexString = new StringBuffer();
-//
-//                        for (int i = 0; i < hash.length; i++) {
-//                            String hex = Integer.toHexString(0xff & hash[i]);
-//                            if (hex.length() == 1) hexString.append('0');
-//                            hexString.append(hex);
-//                        }
-//
-//                        hashQR = hexString.toString();
-//                    }
-//                    else
-//                    {
-//                        hashQR = qrName.replace(" ","_");
-//                        hashQR = hashQR.replace(".","_");
-//                    }
-
                     DatabaseReference fluffyRef = mDatabase.child(DBNAME);
                     String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(new Date());
                     personData.date = timeStamp;
@@ -509,6 +486,39 @@ public class MainActivity extends AppCompatActivity {
                 {
 
                 }
+                dialog.dismiss();
+            }
+        });
+
+        dialogCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    public void showDialogDelete(Activity activity, String msg){
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_c);
+
+        TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
+        text.setText(msg);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.btn_dialog);
+        dialogButton.setText("DELETE");
+        Button dialogCancel = (Button) dialog.findViewById(R.id.btn_cancel);
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearDB();
+                Toast.makeText(getApplicationContext(),"All data has been deleted from "+DBNAME,Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
         });
