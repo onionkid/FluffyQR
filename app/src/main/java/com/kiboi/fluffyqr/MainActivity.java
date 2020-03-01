@@ -73,13 +73,10 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-//    public final String SCANNER_ACTIVITY ="qrscanner";
     public final int RCODE_SCANNER_ACTIVITY = 0;
     public final int ACTIVITY_CHOOSE_FILE1 = 1;
 
     private static DatabaseReference mDatabase;
-//    static String DBNAME = "fluffy";
-//    static String DBNAME = "fluffy2";
     static String DBNAME = "hackathon2020";
     static Query myQuery = null;
     private final String TAG = "FluffyQR";
@@ -156,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 Intent intent = new Intent(getApplicationContext(),QRScannerActivity.class);
                 startActivityForResult(intent,RCODE_SCANNER_ACTIVITY);
             }
@@ -235,6 +230,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.delete_db:
                 showDialogDelete(this,"This will clear all the contents of database: "+DBNAME);
+                break;
+            case R.id.about:
+                Toast.makeText(this,"Fluffy QR is created by Kiboi",Toast.LENGTH_LONG).show();
                 break;
         }
 

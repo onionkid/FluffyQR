@@ -4,22 +4,31 @@
     tools:context="com.kiboi.fluffyqr.MainActivity">
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:title="Check Attendance"
         app:showAsAction="never" />
     <item
+        android:orderInCategory="2"
         android:id="@+id/upload_csv"
         android:title="Upload CSV" />
     <item
+        android:orderInCategory="3"
         android:id="@+id/download_csv"
         android:title="Download CSV" />
     <item
+        android:orderInCategory="4"
         android:id="@+id/reset_attendance"
         android:title="Reset Attendance" />
     <item
+        android:orderInCategory="5"
         android:id="@+id/change_db"
         android:title="Change DB" />
     <item
+        android:orderInCategory="6"
         android:id="@+id/delete_db"
         android:title="Clear DB" />
+    <item
+        android:orderInCategory="100"
+        android:id="@+id/about"
+        android:title="About" />
 </menu>
